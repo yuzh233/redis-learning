@@ -1,0 +1,44 @@
+version: '3'
+services:
+    redis-master:
+        image: redis
+        restart: on-failure
+        container_name: redis-master
+        ports:
+            - 63791:6379
+        networks:
+            - redis-master-slave-network
+        volumes:
+            - "~/Learning/redis-learning/redis-master-slave/redis-master.conf:/usr/local/etc/redis/redis.conf"
+        command: redis-server /usr/local/etc/redis/redis.conf
+
+    redis-slave1:
+        image: redis
+        restart: on-failure
+        container_name: redis-slave1
+        ports:
+            - 63792:6379
+        depends_on:
+            - redis-master
+        networks:
+            - redis-master-slave-network
+        volumes:
+            - "~/Learning/redis-learning/redis-master-slave/redis-slave1.conf:/usr/local/etc/redis/redis.conf"
+        command: redis-server /usr/local/etc/redis/redis.conf
+
+    redis-slave2:
+        image: redis
+        restart: on-failure
+        container_name: redis-slave2
+        ports:
+            - 63793:6379
+        depends_on:
+            - redis-master
+        networks:
+            - redis-master-slave-network
+        volumes:
+            - "~/Learning/redis-learning/redis-master-slave/redis-slave2.conf:/usr/local/etc/redis/redis.conf"
+        command: redis-server /usr/local/etc/redis/redis.conf
+
+networks:
+    redis-master-slave-network:

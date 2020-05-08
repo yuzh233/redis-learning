@@ -1,0 +1,86 @@
+version: '3'
+services:
+    redis-master:
+        image: redis
+        restart: on-failure
+        container_name: redis-master
+        ports:
+            - 63791:6379
+        networks:
+            - redis-sentinel-network
+        volumes:
+            - "~/Learning/redis-learning/redis-sentinel/redis-master.conf:/usr/local/etc/redis/redis.conf"
+        command: redis-server /usr/local/etc/redis/redis.conf
+
+    redis-slave1:
+        image: redis
+        restart: on-failure
+        container_name: redis-slave1
+        ports:
+            - 63792:6379
+        depends_on:
+            - redis-master
+        networks:
+            - redis-sentinel-network
+        volumes:
+            - "~/Learning/redis-learning/redis-sentinel/redis-slave1.conf:/usr/local/etc/redis/redis.conf"
+        command: redis-server /usr/local/etc/redis/redis.conf
+
+    redis-slave2:
+        image: redis
+        restart: on-failure
+        container_name: redis-slave2
+        ports:
+            - 63793:6379
+        depends_on:
+            - redis-master
+        networks:
+            - redis-sentinel-network
+        volumes:
+            - "~/Learning/redis-learning/redis-sentinel/redis-slave2.conf:/usr/local/etc/redis/redis.conf"
+        command: redis-server /usr/local/etc/redis/redis.conf
+
+    sentinel-1:
+        image: redis
+        restart: on-failure
+        container_name: sentinel-1
+        ports:
+            - 16379:26379
+        networks:
+            - redis-sentinel-network
+        depends_on:
+            - redis-master
+        volumes:
+            - "~/Learning/redis-learning/redis-sentinel/sentinel1.conf:/usr/local/etc/redis/redis.conf"
+        command: redis-sentinel /usr/local/etc/redis/redis.conf
+
+    sentinel-2:
+        image: redis
+        restart: on-failure
+        container_name: sentinel-2
+        ports:
+            - 26379:26379
+        networks:
+            - redis-sentinel-network
+        depends_on:
+            - redis-master
+        volumes:
+            - "~/Learning/redis-learning/redis-sentinel/sentinel2.conf:/usr/local/etc/redis/redis.conf"
+        command: redis-sentinel /usr/local/etc/redis/redis.conf
+
+    sentinel-3:
+        image: redis
+        restart: on-failure
+        container_name: sentinel-3
+        ports:
+            - 36379:26379
+        depends_on:
+            - redis-master
+        networks:
+            - redis-sentinel-network
+        volumes:
+            - "~/Learning/redis-learning/redis-sentinel/sentinel3.conf:/usr/local/etc/redis/redis.conf"
+        command: redis-sentinel /usr/local/etc/redis/redis.conf
+
+networks:
+    redis-sentinel-network:
