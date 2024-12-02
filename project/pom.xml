@@ -36,7 +36,7 @@
         <dependency>
             <groupId>io.lettuce</groupId>
             <artifactId>lettuce-core</artifactId>
-            <version>5.2.2.RELEASE</version>
+            <version>6.5.1.RELEASE</version>
         </dependency>
 
         <!-- 支持布隆过滤器指令的 redis 客户端 -->
